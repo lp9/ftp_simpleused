@@ -25,11 +25,11 @@
 using namespace std;
 
 //#define LOCAL_FILE      ""
-#define UPLOAD_FILE_AS  "while-uploading.txt"
+//#define UPLOAD_FILE_AS  "README"
 //#define REMOTE_URL      ""  UPLOAD_FILE_AS
-#define RENAME_FILE_TO  "renamed-and-fine.txt"
+//#define RENAME_FILE_TO  "renamed-and-fissssne.txt"
 
-int upl(string LOCAL_FILE,string  REMOTE_URL);
+int upl(string LOCAL_FILE,string  REMOTE_URL,string UPLOAD_FILE_AS, string RENAME_FILE_TO );
 int getf(string url,string);
 
 static size_t read_callback(void *ptr, size_t size, size_t nmemb, void *stream)
@@ -67,7 +67,7 @@ int main(void)
 {
 //getf("","");
   //upl();
-
+  upl("File to upload","address URL","UPLOAD_FILE AS","RENAME_FILE TO");
   return 0;
 }
 
@@ -117,7 +117,8 @@ int getf(string url,string name)
 
 }
 
-int upl(string LOCAL_FILE,string  REMOTE_URL)
+int upl(string LOCAL_FILE,string  REMOTE_URL,string UPLOAD_FILE_AS, string RENAME_FILE_TO )
+//int upl(string LOCAL_FILE,string  REMOTE_URL )
 {
   CURL *curl;
   CURLcode res;
@@ -125,16 +126,22 @@ int upl(string LOCAL_FILE,string  REMOTE_URL)
   struct stat file_info;
   curl_off_t fsize;
 
+  //UPLOAD_FILE_AS="RNFR "+UPLOAD_FILE_AS;     tylko do zmiany nazwy pliku na serwerze nizej tez ->
+  //RENAME_FILE_TO="RNTO "+REMOTE_URL;         ->               <-
+
+  REMOTE_URL=REMOTE_URL+UPLOAD_FILE_AS;
+  //cout << UPLOAD_FILE_AS;
+
   struct curl_slist *headerlist=NULL;
-  static const char buf_1 [] = "RNFR " UPLOAD_FILE_AS;
-  static const char buf_2 [] = "RNTO " RENAME_FILE_TO;
+
 
   /* get the file size of the local file */
-  if(stat(LOCAL_FILE.c_str(), &file_info)) {
+  if(stat(LOCAL_FILE.c_str(), &file_info))
+    {
   // printf("Couldnt open '%s': %s\n", LOCAL_FILE, strerror(errno));
       cout<<"sdasdasd";
     return 1;
-  }
+    }
   fsize = (curl_off_t)file_info.st_size;
 
   printf("Local file size: %" CURL_FORMAT_CURL_OFF_T " bytes.\n", fsize);
@@ -148,9 +155,11 @@ int upl(string LOCAL_FILE,string  REMOTE_URL)
   /* get a curl handle */
   curl = curl_easy_init();
   if(curl) {
+      curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);   //verbose mode on
     /* build a list of commands to pass to libcurl */
-    headerlist = curl_slist_append(headerlist, buf_1);
-    headerlist = curl_slist_append(headerlist, buf_2);
+
+    //headerlist = curl_slist_append(headerlist, UPLOAD_FILE_AS.c_str());   //zmiana nazwy pliku z
+    //headerlist = curl_slist_append(headerlist, RENAME_FILE_TO.c_str());       //zmiana nazwy pliku na
 
     /* we want to use our own read function */
     curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_callback);
