@@ -24,12 +24,12 @@
 
 using namespace std;
 
-#define LOCAL_FILE      ""
+//#define LOCAL_FILE      ""
 #define UPLOAD_FILE_AS  "while-uploading.txt"
-#define REMOTE_URL      ""  UPLOAD_FILE_AS
+//#define REMOTE_URL      ""  UPLOAD_FILE_AS
 #define RENAME_FILE_TO  "renamed-and-fine.txt"
 
-int upl();
+int upl(string LOCAL_FILE,string  REMOTE_URL);
 int getf(string url,string);
 
 static size_t read_callback(void *ptr, size_t size, size_t nmemb, void *stream)
@@ -66,23 +66,17 @@ static size_t my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream)
 int main(void)
 {
 //getf("","");
-  upl();
+  //upl();
 
   return 0;
 }
 
 int getf(string url,string name)
 {
-  const char *url1;
-  const char *name1;
-  name1=name.c_str();
-  //url1=new char[url.size()];
-  url1=url.c_str();
-
   CURL *curl;
   CURLcode res;
   struct FtpFile ftpfile={
-    name1, /* name to store the file as if succesful */
+    name.c_str(), /* name to store the file as if succesful */
     NULL
   };
 
@@ -94,7 +88,7 @@ int getf(string url,string name)
      * You better replace the URL with one that works!
      */
     curl_easy_setopt(curl, CURLOPT_URL,
-                     url1);
+                     url.c_str());
     /* Define our callback to get called when there's data to be written */
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, my_fwrite);
     /* Set a pointer to our struct to pass to the callback */
@@ -123,7 +117,7 @@ int getf(string url,string name)
 
 }
 
-int upl()
+int upl(string LOCAL_FILE,string  REMOTE_URL)
 {
   CURL *curl;
   CURLcode res;
@@ -136,7 +130,7 @@ int upl()
   static const char buf_2 [] = "RNTO " RENAME_FILE_TO;
 
   /* get the file size of the local file */
-  if(stat(LOCAL_FILE, &file_info)) {
+  if(stat(LOCAL_FILE.c_str(), &file_info)) {
   // printf("Couldnt open '%s': %s\n", LOCAL_FILE, strerror(errno));
       cout<<"sdasdasd";
     return 1;
@@ -146,7 +140,7 @@ int upl()
   printf("Local file size: %" CURL_FORMAT_CURL_OFF_T " bytes.\n", fsize);
 
   /* get a FILE * of the same file */
-  hd_src = fopen(LOCAL_FILE, "rb");
+  hd_src = fopen(LOCAL_FILE.c_str(), "rb");
 
   /* In windows, this will init the winsock stuff */
   curl_global_init(CURL_GLOBAL_ALL);
@@ -165,7 +159,7 @@ int upl()
     curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
 
     /* specify target */
-    curl_easy_setopt(curl,CURLOPT_URL, REMOTE_URL);
+    curl_easy_setopt(curl,CURLOPT_URL, REMOTE_URL.c_str());
 
     /* pass in that last of FTP commands to run after the transfer */
     curl_easy_setopt(curl, CURLOPT_POSTQUOTE, headerlist);
