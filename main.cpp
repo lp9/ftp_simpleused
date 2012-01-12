@@ -1,10 +1,10 @@
 /***************************************************************************
  *  author:  lp9
  *Sciaganie i wysyłanie za pomoca libcurl. wziete z przykladow i zmodyfikowane lekko
- *Jak działa dokladie nie wiem  -_-
+ *Jak działa dokładnie nie wiem  -_-
  *
  *Downloading and sending via libcurl. and examples taken from a slightly modified
-  * How does dokladie not know .-_-
+  *  How exactly do not know -_-
  ***************************************************************************/
 
 #include<curl/curl.h>
@@ -21,22 +21,19 @@
 #include <unistd.h>
 #endif
 
-
 using namespace std;
 
 
-class ftp
+class ftp //ładnie zamknięte wysyłanie i pobieranie na ftp za pomocą libcurla. :)
 {
 
-  static size_t read_callback(void *ptr, size_t size, size_t nmemb, void *stream)
+  static size_t read_callback(void *ptr, size_t size, size_t nmemb, FILE* stream)
   {
     /* in real-world cases, this would probably get this data differently
        as this fread() stuff is exactly what the library already would do
        by default internally */
-   // size_t retcode = fread(ptr, size, nmemb, stream);
-    size_t retcode = fread(ptr, size, nmemb, (FILE*)stream);
-
-    //fprintf(stderr, "*** We read %" _FMT_SIZE_T " bytes from file\n", retcode);
+    size_t retcode = fread(ptr, size, nmemb, stream);
+    //fprintf(stderr, "*** We read %" SIZE_T " bytes from file\n", retcode);
 
     return retcode;
   }
@@ -78,22 +75,17 @@ public:
       NULL
     };
 
-    if(curl) {
-      /*
-       * You better replace the URL with one that works!
-       */
+    if(curl)
+      {
       curl_easy_setopt(curl, CURLOPT_URL,
                        url.c_str());
       /* Define our callback to get called when there's data to be written */
       curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, my_fwrite);
       /* Set a pointer to our struct to pass to the callback */
       curl_easy_setopt(curl, CURLOPT_WRITEDATA, &ftpfile);
-
       /* Switch on full protocol/debug output */
       curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
-
       res = curl_easy_perform(curl);
-
       /* always cleanup */
       curl_easy_cleanup(curl);
 
@@ -124,8 +116,7 @@ public:
       /* get the file size of the local file */
       if(stat(LOCAL_FILE.c_str(), &file_info))
         {
-      // printf("Couldnt open '%s': %s\n", LOCAL_FILE, strerror(errno));
-          cout<<"\nNIe ma pliku";
+          cout<<"\nNIe ma pliku/blad otwarcia"<<LOCAL_FILE;
         return 1;
         }
       fsize = (curl_off_t)file_info.st_size;
@@ -134,8 +125,6 @@ public:
 
       /* get a FILE * of the same file */
       hd_src = fopen(LOCAL_FILE.c_str(), "rb");
-
-      /* In windows, this will init the winsock stuff */
 
       /* get a curl handle */
       curl = curl_easy_init();
@@ -185,9 +174,11 @@ public:
 int main(void)
 {
   ftp ftp;
-  ftp.get("URL","NAME_SAVE_TO_DISK");
-  ftp.upl("LOCAL_FILE_NAME","ftp://USER:PASSWD@URL");
+  //Pobieranie. Download from FTP
+  ftp.get("URL","NAME_SAVE_TO_DISK"); //podajemy np. ("ftp://ftp.aster.pl/pub/speed/1m","1m")
+  //Upload file to FTP.
+  ftp.upl("LOCAL_FILE_NAME","ftp://USER:PASSWD@URL");  //podajemy np. ("READ","URL")
 
-  return 1;
+  return 0;
 }
 
