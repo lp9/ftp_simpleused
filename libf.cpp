@@ -1,10 +1,8 @@
 /***************************************************************************
  *  author:  lp9
- *Sciaganie i wysyłanie za pomoca libcurl. wziete z przykladow i zmodyfikowane lekko
- *Jak działa dokładnie nie wiem  -_-
+ *Sciaganie i wysyłanie za pomoca libcurl.
  *
- *Downloading and sending via libcurl. and examples taken from a slightly modified
-  *  How exactly do not know -_-
+ *Downloading and sending via libcurl.
  ***************************************************************************/
 
 #include "libf.hpp"
@@ -13,9 +11,7 @@ using namespace std;
 
 static size_t read_callback(void *ptr, size_t size, size_t nmemb, FILE* stream)
   {
-    /* in real-world cases, this would probably get this data differently
-       as this fread() stuff is exactly what the library already would do
-       by default internally */
+
     size_t retcode = fread(ptr, size, nmemb, stream);
     //fprintf(stderr, "*** We read %" SIZE_T " bytes from file\n", retcode);
 
@@ -31,8 +27,8 @@ static size_t read_callback(void *ptr, size_t size, size_t nmemb, FILE* stream)
   static size_t my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream)
   {
     struct FtpFile *out=(struct FtpFile *)stream;
-    if(out && !out->stream) {
-      /* open file for writing */
+    if(out && !out->stream)
+      {
       out->stream=fopen(out->filename, "wb");
       if(!out->stream)
         return -1; /* failure, can't open file to write */
