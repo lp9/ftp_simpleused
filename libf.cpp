@@ -1,8 +1,9 @@
 /***************************************************************************
  *  author:  lp9
  *Sciaganie i wysyłanie za pomoca libcurl.
+_-
  *
- *Downloading and sending via libcurl.
+ *Downloading and sending via libcurl. 
  ***************************************************************************/
 
 #include "libf.hpp"
@@ -11,7 +12,9 @@ using namespace std;
 
 static size_t read_callback(void *ptr, size_t size, size_t nmemb, FILE* stream)
   {
-
+    /* in real-world cases, this would probably get this data differently
+       as this fread() stuff is exactly what the library already would do
+       by default internally */
     size_t retcode = fread(ptr, size, nmemb, stream);
     //fprintf(stderr, "*** We read %" SIZE_T " bytes from file\n", retcode);
 
@@ -27,8 +30,8 @@ static size_t read_callback(void *ptr, size_t size, size_t nmemb, FILE* stream)
   static size_t my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream)
   {
     struct FtpFile *out=(struct FtpFile *)stream;
-    if(out && !out->stream)
-      {
+    if(out && !out->stream) {
+      /* open file for writing */
       out->stream=fopen(out->filename, "wb");
       if(!out->stream)
         return -1; /* failure, can't open file to write */
@@ -166,7 +169,7 @@ int ftp::cdir(string REMOTE_URL,string NEW_DIR)
   curl_easy_setopt(curl,CURLOPT_URL, REMOTE_URL.c_str());
 
   /* pass the list of custom commands to the handle */
-  curl_easy_setopt(curl, CURLOPT_QUOTE, header);
+  curl_easy_setopt(curl, CURLOPT_POSTQUOTE, header);
 
   curl_easy_perform(curl); /* transfer ftp data! */
 
