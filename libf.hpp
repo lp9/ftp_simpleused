@@ -27,16 +27,18 @@ using namespace std;
 
 class ftp //ładnie zamknięte wysyłanie i pobieranie na ftp za pomocą libcurla. :)
 {
-
   CURL *curl;
   CURLcode res;
 
 public:
-  ftp();
+  ftp(int v);
+  ~ftp();
 
   int get(string url,string name_save_to_disk);
   int upl(string LOCAL_FILE,string  REMOTE_URL);
+  int cdir(string REMOTE_URL,string NEW_DIR);
 
+  int verb;
 };
 
 

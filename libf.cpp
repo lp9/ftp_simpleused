@@ -11,13 +11,6 @@
 
 using namespace std;
 
-ftp::ftp()
-{
-  curl_global_init(CURL_GLOBAL_DEFAULT);
-  curl = curl_easy_init();
-
-}
-
 static size_t read_callback(void *ptr, size_t size, size_t nmemb, FILE* stream)
   {
     /* in real-world cases, this would probably get this data differently
@@ -47,27 +40,39 @@ static size_t read_callback(void *ptr, size_t size, size_t nmemb, FILE* stream)
     return fwrite(buffer, size, nmemb, out->stream);
   }
 
+ftp::ftp(int v)
+{
+  curl_global_init(CURL_GLOBAL_ALL);
+  curl = curl_easy_init();
+  verb=v;
+}
+
+ftp::~ftp()
+{
+  curl_easy_cleanup(curl);
+  curl_global_cleanup();
+}
+
 int ftp::get(string url,string name_save_to_disk)
 {
-
-  struct FtpFile ftpfile={
+    struct FtpFile ftpfile={
     name_save_to_disk.c_str(), /* name to store the file as if succesful */
     NULL
   };
 
   if(curl)
     {
-    curl_easy_setopt(curl, CURLOPT_URL,
-                     url.c_str());
+    curl_easy_setopt(curl, CURLOPT_URL,url.c_str());
     /* Define our callback to get called when there's data to be written */
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, my_fwrite);
     /* Set a pointer to our struct to pass to the callback */
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &ftpfile);
-    /* Switch on full protocol/debug output */
-    curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+    if(verb==1)
+      {
+        /* Switch on full protocol/debug output */
+        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+      }
     res = curl_easy_perform(curl);
-    /* always cleanup */
-    curl_easy_cleanup(curl);
 
     if(CURLE_OK != res) {
       /* we failed */
@@ -77,8 +82,7 @@ int ftp::get(string url,string name_save_to_disk)
 
   if(ftpfile.stream)
     fclose(ftpfile.stream); /* close the local file */
-
-  curl_global_cleanup();
+  curl_easy_reset (curl);
 
   return 0;
 
@@ -86,6 +90,7 @@ int ftp::get(string url,string name_save_to_disk)
 
 int ftp::upl(string LOCAL_FILE,string  REMOTE_URL)
 {
+
     FILE *hd_src;
     struct stat file_info;
     curl_off_t fsize;
@@ -105,12 +110,13 @@ int ftp::upl(string LOCAL_FILE,string  REMOTE_URL)
     /* get a FILE * of the same file */
     hd_src = fopen(LOCAL_FILE.c_str(), "rb");
 
-    /* get a curl handle */
-    curl = curl_easy_init();
-    if(curl) {
+    if(curl)
+      {
+        if(verb==1)
+          {
         curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);   //verbose mode on
       /* build a list of commands to pass to libcurl */
-
+          }
       /* we want to use our own read function */
       curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_callback);
 
@@ -138,12 +144,39 @@ int ftp::upl(string LOCAL_FILE,string  REMOTE_URL)
 
       /* clean up the FTP commands list */
       curl_slist_free_all (headerlist);
+      }
 
-      /* always cleanup */
-      curl_easy_cleanup(curl);
-    }
     fclose(hd_src); /* close the local file */
+    curl_easy_reset (curl);
 
-    curl_global_cleanup();
     return 0;
+}
+
+int ftp::cdir(string REMOTE_URL,string NEW_DIR)
+{
+
+  struct curl_slist *header=NULL;
+  NEW_DIR="MKD "+NEW_DIR;
+
+  header = curl_slist_append(header, NEW_DIR.c_str());
+
+  if(curl)
+    {
+  if(verb==1)
+    {
+  curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+    }
+  /* specify target */
+  curl_easy_setopt(curl,CURLOPT_URL, REMOTE_URL.c_str());
+
+  /* pass the list of custom commands to the handle */
+  curl_easy_setopt(curl, CURLOPT_QUOTE, header);
+
+  curl_easy_perform(curl); /* transfer ftp data! */
+
+  curl_slist_free_all(header); /* free the header list */
+    }
+  curl_easy_reset (curl);
+
+  return 0;
 }
