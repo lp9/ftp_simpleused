@@ -1,9 +1,8 @@
 /***************************************************************************
  *  author:  lp9
  *Sciaganie i wysyłanie za pomoca libcurl.
-_-
  *
- *Downloading and sending via libcurl. 
+ *Downloading and sending via libcurl.
  ***************************************************************************/
 
 #include "libf.hpp"
@@ -75,7 +74,7 @@ int ftp::get(string url,string name_save_to_disk)
 
     if(CURLE_OK != res) {
       /* we failed */
-      fprintf(stderr, "curl told us %d\n", res);
+      //fprintf(stderr, "curl told us %d\n", res);
     }
   }
 
@@ -83,7 +82,7 @@ int ftp::get(string url,string name_save_to_disk)
     fclose(ftpfile.stream); /* close the local file */
   curl_easy_reset (curl);
 
-  return 0;
+    return res;
 
 }
 
@@ -94,7 +93,7 @@ int ftp::upl(string LOCAL_FILE,string  REMOTE_URL)
     struct stat file_info;
     curl_off_t fsize;
 
-    struct curl_slist *headerlist=NULL;
+    //struct curl_slist *headerlist=NULL;
 
     /* get the file size of the local file */
     if(stat(LOCAL_FILE.c_str(), &file_info))
@@ -104,7 +103,7 @@ int ftp::upl(string LOCAL_FILE,string  REMOTE_URL)
       }
     fsize = (curl_off_t)file_info.st_size;
 
-    printf("Local file size: %" CURL_FORMAT_CURL_OFF_T " bytes.\n", fsize);
+    //printf("Local file size: %" CURL_FORMAT_CURL_OFF_T " bytes.\n", fsize);
 
     /* get a FILE * of the same file */
     hd_src = fopen(LOCAL_FILE.c_str(), "rb");
@@ -125,9 +124,6 @@ int ftp::upl(string LOCAL_FILE,string  REMOTE_URL)
       /* specify target */
       curl_easy_setopt(curl,CURLOPT_URL, REMOTE_URL.c_str());
 
-      /* pass in that last of FTP commands to run after the transfer */
-      curl_easy_setopt(curl, CURLOPT_POSTQUOTE, headerlist);
-
       /* now specify which file to upload */
       curl_easy_setopt(curl, CURLOPT_READDATA, hd_src);
 
@@ -141,19 +137,16 @@ int ftp::upl(string LOCAL_FILE,string  REMOTE_URL)
       /* Now run off and do what you've been told! */
       res = curl_easy_perform(curl);
 
-      /* clean up the FTP commands list */
-      curl_slist_free_all (headerlist);
       }
 
     fclose(hd_src); /* close the local file */
     curl_easy_reset (curl);
 
-    return 0;
+    return res;
 }
 
 int ftp::cdir(string REMOTE_URL,string NEW_DIR)
 {
-
   struct curl_slist *header=NULL;
   NEW_DIR="MKD "+NEW_DIR;
 
@@ -171,11 +164,11 @@ int ftp::cdir(string REMOTE_URL,string NEW_DIR)
   /* pass the list of custom commands to the handle */
   curl_easy_setopt(curl, CURLOPT_POSTQUOTE, header);
 
-  curl_easy_perform(curl); /* transfer ftp data! */
+  res=curl_easy_perform(curl); /* transfer ftp data! */
 
   curl_slist_free_all(header); /* free the header list */
     }
   curl_easy_reset (curl);
 
-  return 0;
+    return res;
 }
