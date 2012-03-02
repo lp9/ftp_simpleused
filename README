@@ -1,4 +1,5 @@
-Naprawdę jest to napisane przy użyciu c i c++. W większości c bo libcurl jest w c.
+!!!Do działania jest potrzebna biblioteka libcurl dostępna ze strony curl.!!!
+Wkrótce zrobię porządek.
 
 1)README POLISH
 2)README ENGLISH(google translator).
@@ -20,7 +21,6 @@ b) Założenia(Cele):
 -Stworzenie ładnie opisanej klasy/funkcji która by zajmowała się tylko pobieraniem/wysyłaniem pliku na/z ftp, za pomocą libcurl.
 -Przekazywanymi argumentami by była ścieżka źródłowa i docelowa. Tyle chyba by wystarczyło. No może jeszcze nazwa pod którą zapis.
 -Opisanie co i jak działa.
--I by było jak najwięcej kodu c++, by uprościć wszystko(o ile się da)
 
 c) Odezwa
 
@@ -56,7 +56,6 @@ b) Assumptions (Objectives):
 -Creating nicely described the class / function that would be occupied only downloading / sending a file to / from ftp via libcurl.
 -Transmitted by the arguments was the source path and target. So many think would be enough. Well, maybe even the name under which the record.
 -Describe what and how it works.
--I would be as much code in C + + to simplify everything (if possible)
 
 c) A statement
 
