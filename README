@@ -1,20 +1,14 @@
+Simple used libcurl.
+
+
 !!!Do działania jest potrzebna biblioteka libcurl dostępna ze strony curl.!!!
 Wkrótce zrobię porządek.
 
 1)README POLISH
-2)README ENGLISH(google translator).
+2)README ENGLISH.
 
 1)
 
-a) Historia pomysłu.
-	Pewnego dnia( dosyć niedawno) okazało się że muszę napisać/jest mi potrzebny kawałek kodu który by miał za zadanie wysyłanie i pobieranie plików z ftp. Pomyślałem może Qt?
-Bawiłem się dosyć długo QFtp, ale pomimo wszelkich prób moich nie działało. Ba nawet nie chciało się połączyć z serwerem. A kod był wzięty żywcem z przykładu siedzącego w manualu.
-No, cóż. Szukałem dalej i tak o to natrafiłem na libcurl. Najpierw poczytałem tutka, później to co mnie interesowało z manuala i przykładu. Jednak pomimo tej lektury w wersji oryginalnej jak
-i przetłumaczonej translatorem. Tak, wiem translator. Dużo nie zrozumiałem... Nie zrażając się, postanowiłem łopatologicznie wziąć przykład z strony libcurla i dostosować do siebie.
-Tak by było dosyć łatwo używać. Po paru problemach(linkowanie itp.) udało mi się skompilować pierwszy przykład dotyczący sćiągania plików z serwera. Więc wziąłem się za wysyłanie.
-Tutaj już były większe problemy i gdyby nie forum(adres podany na końcu),  to prawdopodobnie nadal męczyłbym się nad kompilacją. Było trzeba trochę popoprawiać kod przykładu.
-Wziąłem wszystko razem, dałem do odpowiednich funkcji. I postanowiłem wrzucić to na gita. Czemu? Przeglądając internet (polską stronę internetu) zauważyłem że dużo ludzi się męczy,
-by użyć libcurla w swoim programie.
 
 b) Założenia(Cele):
 
@@ -22,10 +16,7 @@ b) Założenia(Cele):
 -Przekazywanymi argumentami by była ścieżka źródłowa i docelowa. Tyle chyba by wystarczyło. No może jeszcze nazwa pod którą zapis.
 -Opisanie co i jak działa.
 
-c) Odezwa
 
-Prośba do Was, pomóżcie. xD
-Chociaż przeczytałem tutoriala i opis dotyczący libcurla ze strony głównej, to nadal nie rozumiem jak działają niektóre rzeczy. Winą może być mój słabby angielski.
 
 d) Źródła i inne:
 
@@ -40,35 +31,10 @@ Korzystałem z przykladów i tutoriala. Jak coś trzeba zamieścić z tego powod
 
 2) English
 
-a) History of the idea.
-
-One day (quite recently), it turned out that I write / I need a piece of code that would have the task of sending and downloading files from ftp. I thought may Qt?
-I played quite a long QFtp, but despite all my attempts did not work. Ba did not even want to connect to the server. A code was taken straight from the example of sitting in the man.
-Well, well. I was looking on and so on that I found on libcurl. First, read a cornet, then what interested me the manual and example. However, despite this reading in the original version as
-and the translator translated. Yes, I know translator. A lot do not understand ... Not discouraged, I decided to take the example of simple rule of thumb the libcurl and adjust to each other.
-That would be quite easy to use. After a few problems (linking, etc.) I was able to compile the first example for downloading files from the server. So I took to be sending.
-Here already were larger and had no problems forum (address given at the end), you probably still męczyłbym above compilation. There was little need popoprawiać code example.
-I took everything together, I gave the appropriate functions. I decided to put it on the Gita. Why? Looking through the internet (Polish web page) I noticed that a lot of people are tired,
-to use libcurl in your program.
-
-b) Assumptions (Objectives):
-
--Creating nicely described the class / function that would be occupied only downloading / sending a file to / from ftp via libcurl.
--Transmitted by the arguments was the source path and target. So many think would be enough. Well, maybe even the name under which the record.
--Describe what and how it works.
-
-c) A statement
-
-Request to you, help me. xD
-Although I read the tutorial and description of libcurl from the homepage, you still to not Understand how some things work. May be my fault weak English.
-
-d) Sources and others:
+ Sources and others:
 
 -http://curl.haxx.se/libcurl/c/ftpupload.html
 -http://curl.haxx.se/libcurl/c/ftpget.html
 -http://curl.haxx.se/libcurl/
 -http://forum.warsztat.gd/index.php?topic=17358.0
 
-e) Notices.
-I used examples and tutorial. How do you post something for this reason that I used the examples let me know.
-Sorry for such a translation into English. In the future I will try to correct them.
