@@ -3,6 +3,12 @@
  *Sciaganie i wysyłanie za pomoca libcurl.
  *
  *Downloading and sending via libcurl.
+ * 
+ * source:
+ * 
+*-http://curl.haxx.se/libcurl/c/ftpupload.html
+*-http://curl.haxx.se/libcurl/c/ftpget.html
+*-http://curl.haxx.se/libcurl/
  ***************************************************************************/
 
 #include "libf.hpp"
